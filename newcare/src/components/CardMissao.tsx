@@ -37,7 +37,7 @@ export function CardMissao({ missao, onPress, onDetalhes }: Props) {
             </View>
           </View>
 
-          <Text style={styles.descricao}>{missao.descricao}</Text>
+          <Text style={styles.descricao} numberOfLines={3}>{missao.descricao}</Text>
 
           <View style={styles.metaLinha}>
             <View style={styles.metaChip}>
@@ -91,6 +91,8 @@ const criarStyles = (colors: AppColors) => StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     marginBottom: 14,
+    minHeight: 200,
+    overflow: "hidden",
     padding: 16,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 7 },
@@ -105,7 +107,9 @@ const criarStyles = (colors: AppColors) => StyleSheet.create({
   topo: {
     alignItems: "flex-start",
     flexDirection: "row",
+    flexShrink: 1,
     gap: 13,
+    overflow: "hidden",
   },
   iconeCategoria: {
     alignItems: "center",
@@ -127,6 +131,7 @@ const criarStyles = (colors: AppColors) => StyleSheet.create({
   titulo: {
     color: colors.text,
     flex: 1,
+    flexShrink: 1,
     fontSize: 17,
     fontWeight: "900",
   },
@@ -144,6 +149,7 @@ const criarStyles = (colors: AppColors) => StyleSheet.create({
   },
   descricao: {
     color: colors.muted,
+    flexShrink: 1,
     lineHeight: 19,
     marginTop: 6,
   },

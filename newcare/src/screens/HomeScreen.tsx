@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { FlatList, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { Dimensions, FlatList, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { AppColors } from "../../constants/theme";
 import { useStyledFlatListRef } from "../components/AppScrollView";
 import { AvatarMapCard } from "../components/AvatarMapCard";
@@ -24,6 +24,8 @@ export function HomeScreen() {
   const styles = criarStyles(colors);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const flatListRef = useStyledFlatListRef();
+  const larguraTela = Dimensions.get("window").width;
+  const colunas = Platform.OS === "web" && larguraTela >= 768 ? 2 : 1;
   const concluidas = missoes.filter((m) => m.status === StatusMissao.Concluida).length;
   const pendentes = missoes.filter((m) => m.status === StatusMissao.Pendente);
   const percentualHoje = Math.round((concluidas / Math.max(1, missoes.length)) * 100);
@@ -70,7 +72,7 @@ export function HomeScreen() {
 
       <AvatarMapCard
         onPress={() => navigation.navigate("AvatarMap")}
-        mostrarEvolucao
+        mostrarEvolucao={false}
       />
 
       <View style={styles.resumoGrid}>
@@ -172,12 +174,17 @@ export function HomeScreen() {
         style={styles.lista}
         data={pendentes.length > 0 ? pendentes : missoes}
         keyExtractor={(item) => item.id}
+        numColumns={colunas}
+        key={colunas === 2 ? "grid" : "list"}
+        columnWrapperStyle={colunas === 2 ? styles.gridLinha : undefined}
         renderItem={({ item }) => (
-          <CardMissao
-            missao={item}
-            onPress={concluirMissao}
-            onDetalhes={(missaoId) => navigation.navigate("DetalheMissao", { missaoId })}
-          />
+          <View style={colunas === 2 ? styles.gridItem : undefined}>
+            <CardMissao
+              missao={item}
+              onPress={concluirMissao}
+              onDetalhes={(missaoId) => navigation.navigate("DetalheMissao", { missaoId })}
+            />
+          </View>
         )}
         ListHeaderComponent={cabecalho}
         ListEmptyComponent={
@@ -212,6 +219,13 @@ const criarStyles = (colors: AppColors) => StyleSheet.create({
     paddingBottom: 30,
     paddingHorizontal: 18,
     paddingTop: 48,
+  },
+  gridLinha: {
+    gap: 12,
+  },
+  gridItem: {
+    flex: 1,
+    maxWidth: "50%",
   },
   topoMarca: {
     alignItems: "center",
