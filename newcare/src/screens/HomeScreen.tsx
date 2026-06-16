@@ -55,6 +55,7 @@ export function HomeScreen() {
   }
 
   const cabecalho = (
+    
     <>
       <View style={styles.topoMarca}>
         <BrandHeader compact align="left" />
